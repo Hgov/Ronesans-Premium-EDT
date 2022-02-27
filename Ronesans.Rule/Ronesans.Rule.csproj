@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ronesans.Domain.Access\Ronesans.Domain.Access.csproj" />
+    <ProjectReference Include="..\Ronesans.Domain\Ronesans.Domain.csproj" />
+    <ProjectReference Include="..\Ronesans.Mapper\Ronesans.Mapper.csproj" />
+  </ItemGroup>
+
+</Project>

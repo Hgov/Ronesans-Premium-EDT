@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31911.196
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ronesans.Domain", "Ronesans.Domain\Ronesans.Domain.csproj", "{258C89C6-E170-46E4-B14B-909082DD188A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ronesans.Domain.Access", "Ronesans.Domain.Access\Ronesans.Domain.Access.csproj", "{E112A0AF-662A-42A8-B236-2D997140039D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RONESANS.API", "RONESANS.API\RONESANS.API.csproj", "{0F54F780-C78A-4EFA-A393-80AEF91B9DDC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ronesans.UnitOfWork", "Ronesans.UnitOfWork\Ronesans.UnitOfWork.csproj", "{DA7E5A41-29A2-47A8-8B3B-88B231C12DF4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ronesans.Mapper", "Ronesans.Mapper\Ronesans.Mapper.csproj", "{E2E44924-29F1-4248-B7F0-D25D2FEC33FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ronesans.Rule", "Ronesans.Rule\Ronesans.Rule.csproj", "{2DF27A78-CEC1-4ACE-A1F3-CB3AC2FAC3E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{258C89C6-E170-46E4-B14B-909082DD188A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{258C89C6-E170-46E4-B14B-909082DD188A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{258C89C6-E170-46E4-B14B-909082DD188A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{258C89C6-E170-46E4-B14B-909082DD188A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E112A0AF-662A-42A8-B236-2D997140039D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E112A0AF-662A-42A8-B236-2D997140039D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E112A0AF-662A-42A8-B236-2D997140039D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E112A0AF-662A-42A8-B236-2D997140039D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F54F780-C78A-4EFA-A393-80AEF91B9DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F54F780-C78A-4EFA-A393-80AEF91B9DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F54F780-C78A-4EFA-A393-80AEF91B9DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F54F780-C78A-4EFA-A393-80AEF91B9DDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA7E5A41-29A2-47A8-8B3B-88B231C12DF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA7E5A41-29A2-47A8-8B3B-88B231C12DF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA7E5A41-29A2-47A8-8B3B-88B231C12DF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA7E5A41-29A2-47A8-8B3B-88B231C12DF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2E44924-29F1-4248-B7F0-D25D2FEC33FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2E44924-29F1-4248-B7F0-D25D2FEC33FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2E44924-29F1-4248-B7F0-D25D2FEC33FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2E44924-29F1-4248-B7F0-D25D2FEC33FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF27A78-CEC1-4ACE-A1F3-CB3AC2FAC3E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF27A78-CEC1-4ACE-A1F3-CB3AC2FAC3E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF27A78-CEC1-4ACE-A1F3-CB3AC2FAC3E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF27A78-CEC1-4ACE-A1F3-CB3AC2FAC3E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B2618613-B4FC-4A9A-A2CC-4B8BDC0CC61A}
+	EndGlobalSection
+EndGlobal
