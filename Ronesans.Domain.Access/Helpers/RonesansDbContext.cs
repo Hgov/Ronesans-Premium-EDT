@@ -25,18 +25,35 @@ namespace Ronesans.Domain.Access.Helpers
             modelBuilder.Entity<User>()
               .Property(b => b.role_id)
               .HasDefaultValue(2);
-            modelBuilder.Entity<User>().Property(t => t.user_id).HasColumnType("int");
+            modelBuilder.Entity<User>()
+                .Property(t => t.user_id)
+                .HasColumnType("int");
             //user finish
-
+            //shop
+            modelBuilder.Entity<Shop>()
+            .Property(b => b.currency_code)
+            .HasDefaultValue("TRY");
+            modelBuilder.Entity<Shop>()
+             .Property(b => b.status_active)
+             .HasDefaultValue(true);
+            modelBuilder.Entity<Shop>()
+              .Property(b => b.status_visibility)
+              .HasDefaultValue(true);
+            //shop finish
 
             //file
-            modelBuilder.Entity<File>().Property(t => t.file_id).HasColumnType("int");
+            modelBuilder.Entity<File>()
+                .Property(t => t.file_id)
+                .HasColumnType("int");
             //file finish
 
-
             //Userfile
-            modelBuilder.Entity<UserFile>().Property(t => t.user_id).HasColumnType("int");
-            modelBuilder.Entity<UserFile>().Property(t => t.file_id).HasColumnType("int");
+            modelBuilder.Entity<UserFile>()
+                .Property(t => t.user_id)
+                .HasColumnType("int");
+            modelBuilder.Entity<UserFile>()
+                .Property(t => t.file_id)
+                .HasColumnType("int");
             modelBuilder.Entity<UserFile>()
          .HasKey(bc => new { bc.user_id, bc.file_id });
             modelBuilder.Entity<UserFile>()
@@ -48,6 +65,25 @@ namespace Ronesans.Domain.Access.Helpers
                 .WithMany(c => c.UserFiles)
                 .HasForeignKey(bc => bc.file_id);
             //Userfile finish
+
+            //ShopFile
+            modelBuilder.Entity<ShopFile>()
+                .Property(t => t.shop_id)
+                .HasColumnType("int");
+            modelBuilder.Entity<ShopFile>()
+                .Property(t => t.file_id)
+                .HasColumnType("int");
+            modelBuilder.Entity<ShopFile>()
+         .HasKey(bc => new { bc.shop_id, bc.file_id });
+            modelBuilder.Entity<ShopFile>()
+                .HasOne(bc => bc.Shop)
+                .WithMany(b => b.ShopFiles)
+                .HasForeignKey(bc => bc.shop_id);
+            modelBuilder.Entity<ShopFile>()
+                .HasOne(bc => bc.File)
+                .WithMany(c => c.ShopFiles)
+                .HasForeignKey(bc => bc.file_id);
+            //ShopFile finish
         }
         public DbSet<Shop> Shops { get; set; }
         //public DbSet<Announcement> Announcements { get; set; }
@@ -57,6 +93,7 @@ namespace Ronesans.Domain.Access.Helpers
         public DbSet<Role> Roles { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<UserFile> UserFiles { get; set; }
+        public DbSet<ShopFile> ShopFiles { get; set; }
 
     }
 }

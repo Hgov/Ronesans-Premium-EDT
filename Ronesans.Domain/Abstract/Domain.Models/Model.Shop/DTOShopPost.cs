@@ -1,18 +1,26 @@
-﻿namespace Ronesans.Domain.Abstract.Domain.Models.Model.Shop
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Ronesans.Domain.Abstract.Domain.Models.Model.Shop
 {
     public class DTOShopPost
     {
-        public int? city_id { get; set; }
+        [Required]
         public int? user_id { get; set; }
+        [Required]
+        public int? city_id { get; set; }
+        [Required]
+        [RegularExpression(@"^[a-zA-Z0-9''-'\s]{1,40}$", ErrorMessage = "The field is not a valid shop name")]
         public string shop_name { get; set; }
+        [Required]
         public string title { get; set; }
         public string About { get; set; }
-        public string url { get; set; }
-        public string banner_image_name { get; set; }
-        public string icon_name { get; set; }
+        [Required]
         public string first_line { get; set; }
         public string second_line { get; set; }
+        [Required]
         public string state { get; set; }
+        [Required]
+        [RegularExpression(@"^(\d{5}-\d{4}|\d{5}|\d{9})$|^([a-zA-Z]\d[a-zA-Z] \d[a-zA-Z]\d)$", ErrorMessage = "The field is not a valid zipcode")]
         public string zip { get; set; }
         public string currency_code { get; set; }
     }

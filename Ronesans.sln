@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ronesans.UnitOfWork", "Rone
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ronesans.Mapper", "Ronesans.Mapper\Ronesans.Mapper.csproj", "{E2E44924-29F1-4248-B7F0-D25D2FEC33FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ronesans.Rule", "Ronesans.Rule\Ronesans.Rule.csproj", "{2DF27A78-CEC1-4ACE-A1F3-CB3AC2FAC3E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ronesans.Rule", "Ronesans.Rule\Ronesans.Rule.csproj", "{2DF27A78-CEC1-4ACE-A1F3-CB3AC2FAC3E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

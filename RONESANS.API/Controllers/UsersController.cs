@@ -2,7 +2,6 @@
 using Ronesans.Domain.Abstract.Domain.Models.Model.User;
 using Ronesans.Domain.Access.Helpers;
 using Ronesans.Domain.Concrete.Domain;
-using Ronesans.Mapper.Abstract;
 using Ronesans.UnitOfWork.Concrete;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +15,16 @@ namespace RONESANS.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UnitOfWork _uow;
+        private readonly UnitOfWorkRepositories _uowRepositories;
+        private readonly UnitOfWorkRules _uowRules;
         private readonly RonesansDbContext _ronesansDbContext;
-        private readonly IMapper _mapper;
-        public UsersController(RonesansDbContext ronesansDbContext, IMapper mapper)
+       
+        public UsersController(RonesansDbContext ronesansDbContext)
         {
             _ronesansDbContext = ronesansDbContext;
             _uow = new UnitOfWork(_ronesansDbContext);
-            _mapper = mapper;
+            _uowRepositories = new UnitOfWorkRepositories(_ronesansDbContext);
+            _uowRules = new UnitOfWorkRules(_ronesansDbContext);
         }
         // GET: api/<UsersController>
         [HttpGet]
@@ -30,28 +32,32 @@ namespace RONESANS.API.Controllers
         {
             try
             {
-                _uow.ruleUser.RuleGet();
-                var GetUserAll = _uow.userRepository.GetUserAll();
-                var DTOUserGet = _mapper.Map<List<User>, List<DTOUserGet>>(GetUserAll.ToList());
-                return Ok(DTOUserGet.Select(x => new DTOUserGet
-                {
+                _uowRules.ruleUser.RuleGet();
+                var GetUserAll = _uowRepositories.userRepository.GetUserAllAsync().Result;
+                var DTOUserGet = _uow.mapper.Map<List<User>, List<DTOUserGet>>(GetUserAll.ToList());
+                return Ok(DTOUserGet.Select(x=>new {
                     user_id = x.user_id,
-                    first_name = x.first_name,
-                    last_name = x.last_name,
                     role_id = x.role_id,
                     Role = x.Role,
-                    email = x.email,
-                    phone = x.phone,
-                    password = x.password,
                     gender_id = x.gender_id,
                     Gender = x.Gender,
-                    UserFiles = x.UserFiles,
+                    //UserFiles = x.UserFiles,
+                    //image_src = string.Format("{0}://{1}{2}{3}/{4}/{5}",
+                    //Request.Scheme,
+                    //Request.Host,
+                    //"/Files/",
+                    //x.UserFiles.Select(y => y.File.content_type.Substring(0, y.File.content_type.IndexOf("/"))).FirstOrDefault(),
+                    //x.UserFiles.Select(y => y.File.destination_name).FirstOrDefault(),
+                    //x.UserFiles.Select(y => y.File.file_name).FirstOrDefault()),
+                    first_name = x.first_name,
+                    last_name = x.last_name,
+                    password = x.password,
+                    email = x.email,
+                    phone = x.phone,
                     bio = x.bio,
-                    status_active = x.status_active,
-                    status_visibility = x.status_visibility,
                     creation_tsz = x.creation_tsz,
-                    last_updated_tsz = x.last_updated_tsz,
-                    delete_tsz = x.delete_tsz
+                    status_active = x.status_active,
+                    status_visibility = x.status_visibility
                 }));
             }
             catch (AppException ex)
@@ -65,29 +71,33 @@ namespace RONESANS.API.Controllers
         {
             try
             {
-                _uow.ruleUser.RuleGetById(id);
-                var GetByIdUserAll = _uow.userRepository.GetByIdUserAll(id);
-                var DTOUserGet = _mapper.Map<User, DTOUserGet>(GetByIdUserAll);
+                _uowRules.ruleUser.RuleGetById(id);
+                var GetByIdUserAll = _uowRepositories.userRepository.GetByIdUserAllAsync(id).Result;
+                var DTOUserGet = _uow.mapper.Map<User, DTOUserGet>(GetByIdUserAll);
                 return Ok(new
                 {
                     user_id = DTOUserGet.user_id,
-                    first_name = DTOUserGet.first_name,
-                    last_name = DTOUserGet.last_name,
                     role_id = DTOUserGet.role_id,
                     Role = DTOUserGet.Role,
-                    email = DTOUserGet.email,
-                    phone = DTOUserGet.phone,
-                    password = DTOUserGet.password,
                     gender_id = DTOUserGet.gender_id,
                     Gender = DTOUserGet.Gender,
-                    UserFiles=DTOUserGet.UserFiles,
-                  //  image_src = string.Format("{0}://{1}{2}/Files/image/" + DTOUserGet.UserFiles.destination_name + "/{3}", Request.Scheme, Request.Host, Request.PathBase, DTOUserGet.UserFiles.file_name),
+                    //UserFiles = DTOUserGet.UserFiles,
+                   // image_src = string.Format("{0}://{1}{2}{3}/{4}/{5}",
+                   // Request.Scheme,
+                   // Request.Host,
+                   // "/Files/",
+                   // DTOUserGet.UserFiles.Select(y => y.File.content_type.Substring(0, y.File.content_type.IndexOf("/"))).FirstOrDefault(),
+                   // DTOUserGet.UserFiles.Select(y => y.File.destination_name).FirstOrDefault(),
+                   // DTOUserGet.UserFiles.Select(y => y.File.file_name).FirstOrDefault()),
+                    first_name = DTOUserGet.first_name,
+                    last_name = DTOUserGet.last_name,
+                    password = DTOUserGet.password,
+                    email = DTOUserGet.email,
+                    phone = DTOUserGet.phone,
                     bio = DTOUserGet.bio,
-                    status_active = DTOUserGet.status_active,
-                    status_visibility = DTOUserGet.status_visibility,
                     creation_tsz = DTOUserGet.creation_tsz,
-                    last_updated_tsz = DTOUserGet.last_updated_tsz,
-                    delete_tsz = DTOUserGet.delete_tsz
+                    status_active = DTOUserGet.status_active,
+                    status_visibility = DTOUserGet.status_visibility
                 });
             }
             catch (AppException ex)
@@ -104,21 +114,21 @@ namespace RONESANS.API.Controllers
 
             try
             {
-                var _user = _mapper.Map<DTOUserPost, User>(DTOUserPost);
-                _user = _uow.ruleUser.RulePost(_user);
+                var _user = _uow.mapper.Map<DTOUserPost, User>(DTOUserPost);
+                _user = _uowRules.ruleUser.RulePost(_user);
 
-                var _file = _mapper.Map<DTOUserPost, File>(DTOUserPost);
-                _file.destination_name = ControllerContext.ActionDescriptor.ControllerName;
-                _file= _uow.ruleFile.RulePost(_file);
+                //var _file = _uow.mapper.Map<DTOUserPost, File>(DTOUserPost);
+                //_file.destination_name = ControllerContext.ActionDescriptor.ControllerName;
+                //_file = _uowRules.ruleUserFile.RulePost(_file);
 
-                
-                _uow.userFileRepository.Add(new UserFile
-                {
-                    User = _user,
-                    File = _file
-                });
+                //_uow.userFileRepository.AddAsync(new UserFile
+                //{
+                //    User = _user,
+                //    File = _file
+                //});
 
-                _uow.fileCreate.UploadFile(_file);
+                //_uow.fileCreate.UploadFile(_file);
+                _uowRepositories.userRepository.AddAsync(_user);
                 _uow.Complete();
                 return Ok("Success Add");
             }
@@ -134,12 +144,23 @@ namespace RONESANS.API.Controllers
         {
             try
             {
-                var _user = _mapper.Map<DTOUserPut, User>(DTOUserPut);
-                _user = _uow.ruleUser.RulePut(id, _user);
-                _uow.userRepository.update(_user);
+                var _user = _uow.mapper.Map<DTOUserPut, User>(DTOUserPut);
+                _user = _uowRules.ruleUser.RulePut(id, _user);
+                //if (DTOUserPut.from_file != null)
+                //{
+                //    var _file = _uow.mapper.Map<DTOUserPut, File>(DTOUserPut);
+                //    _file.destination_name = ControllerContext.ActionDescriptor.ControllerName;
+                //    _file.file_id = _uow.userFileRepository.GetByUserId(_user.user_id).file_id;
+                //    _file = _uowRules.ruleUserFile.RulePut(_file.file_id, _file);
+                //    _uow.userFileRepository.update(new UserFile
+                //    {
+                //        User = _user,
+                //        File = _file
+                //    });
 
-
-
+                //    _uow.fileCreate.UploadFile(_file);
+                //}
+                _uowRepositories.userRepository.update(_user);
                 _uow.Complete();
                 return Ok("Success Update");
             }
@@ -155,8 +176,16 @@ namespace RONESANS.API.Controllers
         {
             try
             {
-                _uow.ruleUser.RuleDelete(id, ControllerContext.ActionDescriptor.ControllerName);
-                _uow.userRepository.Remove(id);
+                _uowRules.ruleUser.RuleDelete(id);
+                _uowRepositories.userRepository.RemoveAsync(id);
+
+                //var file =_uowRepositories.fileRepository.GetByID(_uowRepositories.userFileRepository.GetByUserId(id).file_id);
+                //if (file != null)
+                //{
+                //    _uowRepositories.fileRepository.RemoveAsync(file.file_id);
+                //    _uow.fileCreate.DeleteFile(file);
+                //}
+
                 _uow.Complete();
                 return Ok("Success Deleted");
             }

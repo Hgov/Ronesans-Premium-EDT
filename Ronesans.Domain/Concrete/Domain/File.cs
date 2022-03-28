@@ -15,6 +15,7 @@ namespace Ronesans.Domain.Concrete.Domain
         public File()
         {
             UserFiles = new HashSet<UserFile>();
+            ShopFiles = new HashSet<ShopFile>();
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -28,6 +29,7 @@ namespace Ronesans.Domain.Concrete.Domain
         public string destination_name { get; set; }
         [NotMapped]
         public IFormFile from_file { get; set; }
-        public ICollection<UserFile> UserFiles { get; set; }
+        public virtual ICollection<UserFile> UserFiles { get; set; }
+        public virtual ICollection<ShopFile> ShopFiles { get; set; }
     }
 }

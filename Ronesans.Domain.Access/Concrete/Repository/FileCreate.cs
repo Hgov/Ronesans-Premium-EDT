@@ -34,7 +34,7 @@ namespace Ronesans.Domain.Access.Concrete.Repository
 
         public void DeleteFile(File file)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Files\\" + file.content_type.Substring(0, file.content_type.IndexOf("/")) + "\\" + file.destination_name + "", file.file_name);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Files\\" + file.content_type.Substring(0, file.content_type.IndexOf("/")) + "\\", file.file_name);
             if (System.IO.File.Exists(path))
                 System.IO.File.Delete(path);
         }
@@ -57,7 +57,7 @@ namespace Ronesans.Domain.Access.Concrete.Repository
             string path;
             try
             {                                                                                 //for the file due to security reasons.
-                path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Files\\" + file.content_type.Substring(0, file.content_type.IndexOf("/")) + "\\" + file.destination_name + "", file.file_name);
+                path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Files\\" + file.content_type.Substring(0, file.content_type.IndexOf("/")) + "\\", file.file_name);
 
                 using (var bits = new FileStream(path, FileMode.Create))
                 {

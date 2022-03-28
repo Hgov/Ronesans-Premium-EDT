@@ -98,9 +98,6 @@ namespace Ronesans.Domain.Access.Migrations
                     b.Property<string>("About")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("banner_image_name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("city_id")
                         .HasColumnType("int");
 
@@ -108,15 +105,14 @@ namespace Ronesans.Domain.Access.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("currency_code")
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("TRY");
 
                     b.Property<DateTime?>("delete_tsz")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("first_line")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("icon_name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("last_updated_tsz")
@@ -132,16 +128,20 @@ namespace Ronesans.Domain.Access.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("status_active")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<bool?>("status_visibility")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("url")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("user_id")
+                        .HasColumnType("int");
 
                     b.Property<string>("zip")
                         .HasColumnType("nvarchar(max)");
@@ -150,7 +150,24 @@ namespace Ronesans.Domain.Access.Migrations
 
                     b.HasIndex("city_id");
 
+                    b.HasIndex("user_id");
+
                     b.ToTable("Shops");
+                });
+
+            modelBuilder.Entity("Ronesans.Domain.Concrete.Domain.ShopFile", b =>
+                {
+                    b.Property<int>("shop_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("file_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("shop_id", "file_id");
+
+                    b.HasIndex("file_id");
+
+                    b.ToTable("ShopFiles");
                 });
 
             modelBuilder.Entity("Ronesans.Domain.Concrete.Domain.User", b =>
@@ -237,7 +254,32 @@ namespace Ronesans.Domain.Access.Migrations
                         .WithMany("Shops")
                         .HasForeignKey("city_id");
 
+                    b.HasOne("Ronesans.Domain.Concrete.Domain.User", "User")
+                        .WithMany("Shops")
+                        .HasForeignKey("user_id");
+
                     b.Navigation("City");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Ronesans.Domain.Concrete.Domain.ShopFile", b =>
+                {
+                    b.HasOne("Ronesans.Domain.Concrete.Domain.File", "File")
+                        .WithMany("ShopFiles")
+                        .HasForeignKey("file_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ronesans.Domain.Concrete.Domain.Shop", "Shop")
+                        .WithMany("ShopFiles")
+                        .HasForeignKey("shop_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("File");
+
+                    b.Navigation("Shop");
                 });
 
             modelBuilder.Entity("Ronesans.Domain.Concrete.Domain.User", b =>
@@ -281,6 +323,8 @@ namespace Ronesans.Domain.Access.Migrations
 
             modelBuilder.Entity("Ronesans.Domain.Concrete.Domain.File", b =>
                 {
+                    b.Navigation("ShopFiles");
+
                     b.Navigation("UserFiles");
                 });
 
@@ -294,8 +338,15 @@ namespace Ronesans.Domain.Access.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Ronesans.Domain.Concrete.Domain.Shop", b =>
+                {
+                    b.Navigation("ShopFiles");
+                });
+
             modelBuilder.Entity("Ronesans.Domain.Concrete.Domain.User", b =>
                 {
+                    b.Navigation("Shops");
+
                     b.Navigation("UserFiles");
                 });
 #pragma warning restore 612, 618

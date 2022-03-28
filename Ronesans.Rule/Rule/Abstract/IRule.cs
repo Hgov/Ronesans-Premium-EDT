@@ -10,8 +10,8 @@ namespace Ronesans.Rule.Rule.Abstract
     {
         void RuleGet();
         void RuleGetById(int id);
-        public TEntity RulePost(TEntity entity);
+        TEntity RulePost(TEntity entity);
         TEntity RulePut(int id, TEntity entity);
-        void RuleDelete(int id, string destination);
+        void RuleDelete(int id);
     }
 }

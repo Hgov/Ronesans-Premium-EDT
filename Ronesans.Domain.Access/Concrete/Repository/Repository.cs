@@ -4,6 +4,7 @@ using Ronesans.Domain.Access.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ronesans.Domain.Access.Concrete.Repository
 {
@@ -17,26 +18,26 @@ namespace Ronesans.Domain.Access.Concrete.Repository
             this._Context = context;
             this._dbSet = _Context.Set<TEntity>();
         }
-        public void Add(TEntity entity)
+        public async Task AddAsync(TEntity entity)
         {
-            _dbSet.Add(entity);
+           await _dbSet.AddAsync(entity);
         }
 
-        public void AddRange(IEnumerable<TEntity> entities)
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            _dbSet.AddRange(entities);
+           await _dbSet.AddRangeAsync(entities);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return _dbSet.ToList();
+            return await _dbSet.ToListAsync();
         }
 
-        public TEntity GetByID(int id)
+        public  TEntity GetByID(int id)
         {
-            return _dbSet.Find(id);
+            return _dbSet.FindAsync(id).Result;
         }
-        public void Remove(int id)
+        public void RemoveAsync(int id)
         {
             _dbSet.Remove(GetByID(id));
         }
@@ -50,9 +51,10 @@ namespace Ronesans.Domain.Access.Concrete.Repository
         {
             _dbSet.Attach(entity);
         }
-        public int Count()
+        public async Task<int> CountAsync()
         {
-            return _dbSet.Count();
+            return await _dbSet.CountAsync();
         }
+
     }
 }

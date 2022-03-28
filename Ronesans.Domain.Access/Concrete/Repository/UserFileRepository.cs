@@ -1,4 +1,5 @@
-﻿using Ronesans.Domain.Access.Abstract.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using Ronesans.Domain.Access.Abstract.IRepository;
 using Ronesans.Domain.Access.Helpers;
 using Ronesans.Domain.Concrete.Domain;
 using System;
@@ -17,5 +18,14 @@ namespace Ronesans.Domain.Access.Concrete.Repository
         }
         public RonesansDbContext ronesansDbContext { get { return _Context as RonesansDbContext; } }
 
+        public async Task<UserFile> GetByIdUserWithFileAsync(int id)
+        {
+            return await _Context.UserFiles.Include(x => x.User).Include(x => x.File).FirstOrDefaultAsync();
+        }
+
+        public async Task<IEnumerable<UserFile>> GetUserWithFileAsync()
+        {
+            return await _Context.UserFiles.Include(x => x.User).Include(x => x.File).ToListAsync();
+        }
     }
 }

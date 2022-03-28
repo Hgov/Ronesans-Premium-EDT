@@ -15,27 +15,13 @@ namespace Ronesans.UnitOfWork.Concrete
         public UnitOfWork(RonesansDbContext RonesansDbContext)
         {
             _RonesansDbContext = RonesansDbContext;
-            userRepository = new UserRepository(_RonesansDbContext);
-            fileRepository = new FileRepository(_RonesansDbContext);
             fileCreate = new FileCreate<File>();
-            userFileRepository = new UserFileRepository(_RonesansDbContext);
-            ruleUser = new RuleUser(userRepository);
-            ruleFile = new RuleFile(fileRepository);
+            mapper = new Mapper.Concrete.MyAutoMapper.Mapper();
         }
 
-        public IUserRepository userRepository { get; private set; }
-
-
-        public IFileRepository fileRepository { get; private set; }
 
         public IFileCreate<File> fileCreate { get; private set; }
-
-        public IUserFileRepository userFileRepository { get; private set; }
-
-        public IRule<User> ruleUser { get; private set; }
-
-        public IRule<File> ruleFile { get; private set; }
-
+        public IMapper mapper { get; private set; }
         public int Complete()
         {
 

@@ -5,6 +5,7 @@ using Ronesans.Domain.Concrete.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ronesans.Domain.Access.Concrete.Repository
 {
@@ -16,37 +17,37 @@ namespace Ronesans.Domain.Access.Concrete.Repository
         }
         public RonesansDbContext ronesansDbContext { get { return _Context as RonesansDbContext; } }
 
-        public IEnumerable<User> GetUserAll()
+        public async Task<IEnumerable<User>> GetUserAllAsync()
         {
-
-            return _Context.Users
+            return await _Context.Users
                 .Include(x => x.gender)
                 .Include(x => x.Role)
-                .Include(x => x.UserFiles)
-                .ThenInclude(x => x.File)
-                .ToList();
+                //.Include(x => x.UserFiles)
+                //.ThenInclude(x => x.File)
+                .ToListAsync();
         }
 
-        public User GetByIdUserAll(int id)
+        public async Task<User> GetByIdUserAllAsync(int id)
         {
-            return _Context.Users.Where(x => x.user_id == id)
+            return await _Context.Users
+                .Where(x => x.user_id == id)
                 .Include(x => x.gender)
                 .Include(x => x.Role)
-                .Include(x => x.UserFiles)
-                .ThenInclude(x => x.File)
-                .FirstOrDefault();
+                //.Include(x => x.UserFiles)
+                //.ThenInclude(x => x.File)
+                .FirstOrDefaultAsync();
         }
-        public bool GetIdAny(int id)
+        public async Task<bool> GetIdAnyAsync(int id)
         {
-            return _Context.Users.Any(x => x.user_id == id);
+            return await _Context.Users.AnyAsync(x => x.user_id == id);
         }
-        public bool GetEmailAny(string email)
+        public async Task<bool> GetEmailAnyAsync(string email)
         {
-            return _Context.Users.Any(x => x.email == email);
+            return await _Context.Users.AnyAsync(x => x.email == email);
         }
-        public bool GetPhoneAny(string phone)
+        public async Task<bool> GetPhoneAnyAsync(string phone)
         {
-            return _Context.Users.Any(x => x.phone == phone);
+            return await _Context.Users.AnyAsync(x => x.phone == phone);
         }
     }
 }

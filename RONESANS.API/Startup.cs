@@ -25,7 +25,7 @@ namespace RONESANS.API
         {
 
             services.AddControllers();
-            services.AddDbContext<RonesansDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("RonesansDB")));
+            services.AddDbContext<RonesansDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("RonesansDB")),ServiceLifetime.Transient);
             services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
@@ -34,6 +34,7 @@ namespace RONESANS.API
             });
 
             services.AddSingleton<IMapper, Ronesans.Mapper.Concrete.MyAutoMapper.Mapper>();
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

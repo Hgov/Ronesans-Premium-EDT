@@ -33,7 +33,8 @@ namespace Ronesans.Domain.Concrete.Domain
         [JsonIgnore]
         public virtual Role Role { get; set; }
         public virtual ICollection<UserFile> UserFiles { get; set; }
- 
+        public virtual ICollection<Shop> Shops { get; set; }
+
 
     }
 }

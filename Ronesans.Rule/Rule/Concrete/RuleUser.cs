@@ -3,20 +3,25 @@ using Ronesans.Domain.Access.Helpers;
 using Ronesans.Domain.Concrete.Domain;
 using Ronesans.Rule.Rule.Abstract;
 using System;
+using System.Threading.Tasks;
 
 namespace Ronesans.Rule.Rule.Concrete
 {
     public class RuleUser:IRule<User>
     {
         private IUserRepository _userRepository;
-        public RuleUser(IUserRepository userRepository)
+        private IGenderRepository _genderRepository;
+        private IRoleRepository _roleRepository;
+        public RuleUser(IUserRepository userRepository, IGenderRepository genderRepository, IRoleRepository roleRepository)
         {
             _userRepository = userRepository;
+            _genderRepository = genderRepository;
+            _roleRepository = roleRepository;
         }
         public void RuleGet()
         {
 
-            if (_userRepository.Count() == 0)
+            if (_userRepository.CountAsync().Result == 0)
                 throw new AppException("No Records Found");
         }
 
@@ -31,18 +36,25 @@ namespace Ronesans.Rule.Rule.Concrete
         public User RulePost(User User)
         {
             //all ready taken data
-            var _userEmail = _userRepository.GetEmailAny(User.email);
+            var _userEmail = _userRepository.GetEmailAnyAsync(User.email).Result;
             if (_userEmail)
                 throw new AppException(User.email + " is already taken");
-            var _userPhone = _userRepository.GetPhoneAny(User.phone);
+            var _userPhone = _userRepository.GetPhoneAnyAsync(User.phone).Result;
             if (_userPhone)
                 throw new AppException(User.phone + " is already taken");
+            var _isRole = _roleRepository.GetAnyAsync((int)User.role_id).Result;
+            if(!_isRole)
+                throw new AppException("Role Not Found.");
+            var _isGender = _genderRepository.GetAnyAsync((int)User.gender_id).Result;
+            if (!_isGender)
+                throw new AppException("Gender Not Found.");
+
 
             //data change base
             User.creation_tsz = DateTime.Now;
             User.last_updated_tsz = DateTime.Now;
 
-            return User;
+            return  User;
         }
         public User RulePut(int id, User User)
         {
@@ -53,10 +65,10 @@ namespace Ronesans.Rule.Rule.Concrete
 
 
             //all ready taken data
-            var _userEmail = _userRepository.GetEmailAny(User.email);
+            var _userEmail = _userRepository.GetEmailAnyAsync(User.email).Result;
             if (_userEmail)
                 throw new AppException(User.email + " is already taken");
-            var _userPhone = _userRepository.GetPhoneAny(User.phone);
+            var _userPhone = _userRepository.GetPhoneAnyAsync(User.phone).Result;
             if (_userPhone)
                 throw new AppException(User.phone + " is already taken");
 
@@ -64,9 +76,19 @@ namespace Ronesans.Rule.Rule.Concrete
 
             //data change
             if (!string.IsNullOrWhiteSpace(User.role_id.ToString()) && _user.role_id != User.role_id)
+            {
+                var _isRole = _roleRepository.GetAnyAsync((int)User.role_id).Result;
+                if (!_isRole)
+                    throw new AppException("Role Not Found.");
                 _user.role_id = User.role_id;
+            }
             if (!string.IsNullOrWhiteSpace(User.gender_id.ToString()) && _user.gender_id != User.gender_id)
+            {
+                var _isGender = _genderRepository.GetAnyAsync((int)User.gender_id).Result;
+                if (!_isGender)
+                    throw new AppException("Gender Not Found.");
                 _user.gender_id = User.gender_id;
+            }
             if (!string.IsNullOrWhiteSpace(User.first_name) && _user.first_name != User.first_name)
                 _user.first_name = User.first_name;
             if (!string.IsNullOrWhiteSpace(User.last_name) && _user.last_name != User.last_name)
@@ -90,18 +112,16 @@ namespace Ronesans.Rule.Rule.Concrete
 
 
 
-            _user.last_updated_tsz = DateTime.UtcNow;
+            _user.last_updated_tsz = DateTime.Now;
 
             return _user;
         }
 
-        public void RuleDelete(int id, string destination)
+        public void RuleDelete(int id)
         {
             var _user = _userRepository.GetByID(id);
             if (_user == null)
                 throw new AppException("User Not Found.");
-
-
         }
     }
 }
